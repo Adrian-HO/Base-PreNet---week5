@@ -35,7 +35,7 @@ void AWeaponBase::PostInitializeComponents()
 
 	/* Get the muzzle arrow component.*/
     //DECLARE a auto variable called Components and SET it to the return value of GetComponents()
-	Components = GetComponents();
+	auto Components = GetComponents();
     //FOR Each Component in Components	
         //IF Component->GetFName() IS "Muzzle"
             //SET the Muzzle to the Component, Cast it as a UArrowComponent
@@ -135,7 +135,7 @@ void AWeaponBase::ReleaseTrigger()
         //DECLARE a float called RemainingTime and SET it to the return value of TimerManager.GetTimerRemaining(FireTimer)
 	
         //CALL SetTimer() on the TimerManager and pass in (FireTimer, this, &AWeaponBase::ClearFireTimer, RemainingTime, false)
-	
+	//TimerManager.SetTimer(FireTimer, this, &AWeaponBase::ClearFireTimer, RemainingTime, false);
     //ENDIF
 }
 

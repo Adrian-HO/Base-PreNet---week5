@@ -8,6 +8,7 @@
 #include "Gameplay/Health/HealthComponent.h"
 #include "Weapons/WeaponBase.h"
 #include "Items/ItemBase.h"
+#include "Math/UnrealMathUtility.h"
 
 /*
 Setup the character defaults
@@ -52,36 +53,36 @@ void ACharacterBase::PostInitializeComponents()
 
 	/* Retrieve the health component. */
 //TODO:
-    //SET Health to the return value of FindComponentByClass<UHealthComponent>()
+	//SET Health to the return value of FindComponentByClass<UHealthComponent>()
 	Health = FindComponentByClass<UHealthComponent>();
-	
-    //check(Health != nullptr && "Character does not have a health component!");
+
+	//check(Health != nullptr && "Character does not have a health component!");
 
 //TODO:
 	/* Subscribe to health component's OnDeath event.*/
-    //IF Health NOT EQUAL to null
+	//IF Health NOT EQUAL to null
 	if (Health)
 		Health->OnDeath.AddDynamic(this, &ACharacterBase::OnDeath);
-        //SUBSCRIBE to the OnDeath Event in the Helth Component, with the OnDeath function
-	
-    //ENDIF
+	//SUBSCRIBE to the OnDeath Event in the Helth Component, with the OnDeath function
+
+//ENDIF
 
 //TODO:
 	/*Retrieve the skeletal mesh component. */
-    //SET SkeletalMesh to the return value of GetMesh()
+	//SET SkeletalMesh to the return value of GetMesh()
 	SkeletalMesh = GetMesh();
-    //IF SkeletalMesh NOT EQUAL to null
+	//IF SkeletalMesh NOT EQUAL to null
 	if (SkeletalMesh != nullptr)
 	{
 		check(SkeletalMesh != nullptr && "Character does not have a skeletal mesh component!");
 
 		/* Retrieve the animation instance.*/
-        //SET AnimationInstance to the SkeletalMeshe's Animation Instance --> Cast<UCharacterBaseAnimation>(SkeletalMesh->GetAnimInstance())
+		//SET AnimationInstance to the SkeletalMeshe's Animation Instance --> Cast<UCharacterBaseAnimation>(SkeletalMesh->GetAnimInstance())
 
 
 		check(AnimationInstance != nullptr && "Character does not have an animation instance!");
 	}
-    //ENDIF
+	//ENDIF
 }
 
 void ACharacterBase::BeginPlay()
@@ -103,9 +104,9 @@ void ACharacterBase::Tick(float DeltaTime)
 	/* Handle movement orientation and speed. */
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->MaxWalkSpeed = MaxJogSpeed;
-    
-//TODO:
-    //IF bHasWeapon AND (bIsAiming OR bIsFiring)
+
+	//TODO:
+		//IF bHasWeapon AND (bIsAiming OR bIsFiring)
 	if (bHasWeapon && (bIsAiming || bIsFiring))
 	{
 		//CALL GetCharacterMovement() and SET bOrientRotationToMovement to false
@@ -119,92 +120,99 @@ void ACharacterBase::Tick(float DeltaTime)
 
 		if (bIsFiring)
 			GetCharacterMovement()->MaxWalkSpeed *= 0.8;
-			//CALL GetCharacterMovement() and SCALE (Multiply) MaxWalkSpeed by 0.8
-		//ENDIF
+		//CALL GetCharacterMovement() and SCALE (Multiply) MaxWalkSpeed by 0.8
+	//ENDIF
 
-		/* Rotate the character towards the aiming point.*/
-		//DECLARE a auto variable called PlayerController and assign it to this Characters Controller. Assign PlayerController as APlayerController 
+	/* Rotate the character towards the aiming point.*/
+	//DECLARE a auto variable called PlayerController and assign it to this Characters Controller. Assign PlayerController as APlayerController 
+		auto PlayerController = Cast<APlayerController>(GetController());
 
-		//IF PlayerController is valid
-			/* Cast cursor trace to world.*/
-			//DECLARE a FVector called MouseLocation
-
+		if (PlayerController)
+		{
+			//IF PlayerController is valid
+				/* Cast cursor trace to world.*/
+				//DECLARE a FVector called MouseLocation
+			FVector MouseLocation;
 			//DECLARE a FVector called MouseDirection
-
+			FVector MouseDirection;
 			//DECLARE a bool called Success and Assign it to the return value of PlayerController->DeprojectMousePositionToWorld(MouseLocation, MouseDirection). Lookup the function in the Documentation
-
+			bool Success = PlayerController->DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
 			/* Rotate the character towards the cursor.*/
-			//IF Success
+
+			if (Success)
+			{
 				/* Cast the cursor onto a plane. */
 				//DECLARE a FVector called LineBegin and Assign it to MouseLocation
-
+				FVector LineBegin = MouseLocation;
 				//DECLARE a FVector called LineEnd and Assign it to MouseLocation  + MouseDirection * 10000.0f
-
+				FVector  LineEnd = MouseLocation + MouseDirection * 10000.0f;
 				//DECLARE a FVector PlaneOrigin and set it to the return value of CurrentWeapon->GetMuzzleLocation()
-
+				FVector PlaneOrigin = CurrentWeapon->GetMuzzleLocation();
 				//DECLARE a FVector called PlaneNormal and SET it to FVector(0.0f, 0.0f, 1.0f)
-
+				FVector PlaneNormal = FVector(0.0f, 0.0f, 1.0f);
 
 				/*Find the intersection of a line and an offset plane. Assumes that the line and plane do indeed intersect */
 				//DECLARE a FVector called LookLocation and SET it to the return value of FMath::LinePlaneIntersection(LineBegin, LineEnd, PlaneOrigin, PlaneNormal)
-
+				FVector LookLocation = FMath::LinePlaneIntersection(LineBegin, LineEnd, PlaneOrigin, PlaneNormal);
 				// Rotate the cursor toward the intersection of the cursor and the plane.
 				//DECLARE a FRotator called LookRotation and Assign it to (LookLocation - GetActorLocation()).Rotation();
-
+				FRotator LookRotation = (LookLocation - GetActorLocation()).Rotation();
 
 				//SET LookRotation Pitch to 0
-
+				LookRotation.Pitch = 0;
 				//SET LookRotation Roll to 0
-
+				LookRotation.Roll = 0;
 
 				/*Slerp to the new rotation*/
 				//CALL SetActorRotation() pass in FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f)
-
-			//ENDIF Success
-		//ENDIF (PlayerController)
+				SetActorRotation(FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f));
+			}//ENDIF Success
+		}//ENDIF (PlayerController)
 	} //ENDIF bHasWeapon AND (bIsAiming OR bIsFiring)
 
 //TODO:
-    /* Set animation weapon parameters.*/
-    //SET the AnimationInstance's bHasWeapon to the local bHasWeapon
-	
-    //SET the AnimationInstance's bIsAiming to the local bIsAiming
-	
+	/* Set animation weapon parameters.*/
+	//SET the AnimationInstance's bHasWeapon to the local bHasWeapon
+	AnimationInstance->bHasWeapon = bHasWeapon;
+	//SET the AnimationInstance's bIsAiming to the local bIsAiming
+	AnimationInstance->bIsAiming = bIsAiming;
 
 
 	/* Set animation movement parameters.*/
-    //DECLARE a float called CurrentSpeed set it to the return value of GetVelocity().Size() <--  Get the length (magnitude) of this vector
-	
-    //DECLARE a bool called bIsMoving and SET it to CurrentSpeed > 0.0f && GetCharacterMovement()->IsMovingOnGround()
-	
+	//DECLARE a float called CurrentSpeed set it to the return value of GetVelocity().Size() <--  Get the length (magnitude) of this vector
+	float CurrentSpeed = GetVelocity().Size();
+	//DECLARE a bool called bIsMoving and SET it to CurrentSpeed > 0.0f && GetCharacterMovement()->IsMovingOnGround()
+	bool bIsMoving = CurrentSpeed > 0.0f && GetCharacterMovement()->IsMovingOnGround();
 
-    //SET the ANimationInstance's bIsMoving to the local bIsMoving
-	
-    //SET the AnimationInstance's MovementSpeed to bIsMoving ? CurrentSpeed : 0.0f
-	
+	//SET the ANimationInstance's bIsMoving to the local bIsMoving
+	AnimationInstance->bIsMoving = bIsMoving;
+		//SET the AnimationInstance's MovementSpeed to bIsMoving ? CurrentSpeed : 0.0f
+		AnimationInstance->MovementSpeed = bIsMoving ? CurrentSpeed : 0.0f;
 
 	/* Set animation strafing rotation paremeter.*/
-    //DECLARE a FVector called MovementDirection and SET it to the return value of GetLastMovementInputVector()
-	
-    //DECLARE a FVector called CharacterDirection and SET it to the return value of GetActorForwardVector()
-	
+	//DECLARE a FVector called MovementDirection and SET it to the return value of GetLastMovementInputVector()
+		FVector MovementDirection = GetLastMovementInputVector();
+	//DECLARE a FVector called CharacterDirection and SET it to the return value of GetActorForwardVector()
+		FVector CharacterDirection = GetActorForwardVector();
 
-    /*We need to set the Strafeing Rotation on the AnimationInstance to blend the movement animation when moving*/
-    //IF !MovementDirection.IsNearlyZero()
-	
-        /*Calculate the Strafing Rotation which is the Arc Tan difference between the Character's Last Movement Direction and Current Movement Direction*/
-        //DECLARE a float called StrafingRotation and SET it to FMath::Atan2(MovementDirection.Y, MovementDirection.X) - FMath::Atan2(CharacterDirection.Y, CharacterDirection.X)
-	    
-        //IF the Absolute value of the StrafingRotation is greater than PI FMath::Abs(StrafingRotation) > PI
-	        //SET StrafingRotation, If StrafingRotation is greater than 0, then set it to (StrafingRotation - PI * 2.0f), otherwise (StrafingRotation + PI * 2.0f) --> Ternary
-	    //ENDIF
-        
-        /*Connvert StrafingRotation to Degrees*/
-	
+	/*We need to set the Strafeing Rotation on the AnimationInstance to blend the movement animation when moving*/
+		if (!MovementDirection.IsNearlyZero())
+		{
 
-        //SET the AnimationInstance's StrafingRotation to the local StrafingRotation
-	
-    //ENDIF
+			/*Calculate the Strafing Rotation which is the Arc Tan difference between the Character's Last Movement Direction and Current Movement Direction*/
+			//DECLARE a float called StrafingRotation and SET it to FMath::Atan2(MovementDirection.Y, MovementDirection.X) - FMath::Atan2(CharacterDirection.Y, CharacterDirection.X)
+			float StrafingRotation = FMath::Atan2(MovementDirection.Y, MovementDirection.X) - FMath::Atan2(CharacterDirection.Y, CharacterDirection.X);
+			//IF the Absolute value of the StrafingRotation is greater than PI FMath::Abs(StrafingRotation) > PI
+			if (FMath::Abs(StrafingRotation) > PI)
+			{
+				StrafingRotation = (StrafingRotation > 0)? (StrafingRotation - PI * 2.0f): ((StrafingRotation + PI * 2.0f));
+			}
+			/*Connvert StrafingRotation to Degrees*/
+			
+
+			//SET the AnimationInstance's StrafingRotation to the local StrafingRotation
+			AnimationInstance->StrafingRotation = StrafingRotation;
+		}//ENDIF
 }
 
 void ACharacterBase::Move(FVector Direction, float Scale)
@@ -216,23 +224,26 @@ void ACharacterBase::Move(FVector Direction, float Scale)
 */
 void ACharacterBase::Fire(bool Toggle)
 {
-//TODO:
-    //IF CurrentWeapon is valid
-        //IF Toggle is true
-            //CALL PullTrigger() on the CurrentWeapon
-        //ELSE
-            //CALL ReleaseTrigger() on the CurrentWeapon
-        //ENDIF
-		
-        //SET bIsFiring to Toggle
-    //END
+	//TODO:
+	if (CurrentWeapon)
+	{
+		if (Toggle == true)
+		{
+			CurrentWeapon->PullTrigger();
+		}
+		else
+		{
+			CurrentWeapon->ReleaseTrigger();
+		}
+		bIsFiring = Toggle;
+	}
 }
 
 void ACharacterBase::Aim(bool Toggle)
 {
-//TODO:
-    //SET bIsAiming to Toggle
-	
+	//TODO:
+		//SET bIsAiming to Toggle
+	bIsAiming = Toggle;
 }
 
 /*
@@ -241,28 +252,29 @@ This function is called by InteractPressed() in the APlayerControllerDefault cla
 */
 void ACharacterBase::Interact(AActor* Actor)
 {
-//TODO:
-	/* Drop the current weapon.*/
-    //CALL DropWeapon()
+	//TODO:
+		/* Drop the current weapon.*/
+		//CALL DropWeapon()
+	DropWeapon();
+		/* Check if the actor is an item.*/
+		//DECLARE a variable of type AItemBase* called Item and assign it to the Cast of Actor passed into this function. Cast Actor as a AItemBase
+	AItemBase* Item = Cast<AItemBase>(Actor);
+	if (Item == nullptr)
+		return;
 
-	/* Check if the actor is an item.*/
-    //DECLARE a variable of type AItemBase* called Item and assign it to the Cast of Actor passed into this function. Cast Actor as a AItemBase
+		/* Check distance from the object.*/
+		//DECLARE a float called Distance and SET it to the return value of Item->GetDistanceTo(this)
+	float Distance = Item->GetDistanceTo(this);
+		//IF the Distance is greater than MaxPickUpDistance
+			//RETURN
+	if (Distance > MaxPickUpDistance)
 
-    //IF Item is null
-        //RETURN
+		/* Hold the item if it's a weapon.*/
+		//DECLARE a AWeaponBase* called Weapon SET it to the Cast of the Item to AWeaponBase. Cast Item to AWeaponBase
 
-	/* Check distance from the object.*/
-    //DECLARE a float called Distance and SET it to the return value of Item->GetDistanceTo(this)
-
-    //IF the Distance is greater than MaxPickUpDistance
-        //RETURN
-
-	/* Hold the item if it's a weapon.*/
-    //DECLARE a AWeaponBase* called Weapon SET it to the Cast of the Item to AWeaponBase. Cast Item to AWeaponBase
-
-    //IF Weapon is valid
-        //CALL HoldWeapon() and pass in the Weapon
-    //ENDIF
+		//IF Weapon is valid
+			//CALL HoldWeapon() and pass in the Weapon
+		//ENDIF
 }
 
 /*
@@ -271,43 +283,43 @@ HoldWeapon() will attach the weapon that is picked up by the Character
 void ACharacterBase::HoldWeapon(AWeaponBase* Weapon)
 {
 	check(Weapon != nullptr && "Passed a null weapon!");
-//TODO:
-	// Drop currently carried weapon first.
-    //CALL DropWeapon()
+	//TODO:
+		// Drop currently carried weapon first.
+		//CALL DropWeapon()
 
-	// Attach weapon to the character.
-    //SET CurrentWeapon to weapon
+		// Attach weapon to the character.
+		//SET CurrentWeapon to weapon
 
-    //CALL Attach() on the CurrentWeapon and pass in this
+		//CALL Attach() on the CurrentWeapon and pass in this
 
-    //CALL Clear() on the CurrentWeapons's OnWeaponFired event
+		//CALL Clear() on the CurrentWeapons's OnWeaponFired event
 
-    /* Subscribe to weapon's events.*/
-    //SUBSCRIBE to the CurrentWeapon's OnWeaponFired and pass in (this, &ACharacterBase::OnWeaponFired)
-	
+		/* Subscribe to weapon's events.*/
+		//SUBSCRIBE to the CurrentWeapon's OnWeaponFired and pass in (this, &ACharacterBase::OnWeaponFired)
+
 }
 /*
 DropWeapon() will detach the Weapon Currently held by the character
 */
 void ACharacterBase::DropWeapon()
 {
-//TODO:
-    //IF CurrentWeapon is not null
-		/* Unsubscribe from weapon's events.*/
-        //CALL RemoveDynamic(this, &ACharacterBase::OnWeaponFired) on the CurrentWeapon's OnWeaponFired event
-	
-		/* Detach weapon from the character.*/
-        //CALL Detach() on the CurrentWeapon()
-	
-        //SET CurrentWeapon to null
-	
+	//TODO:
+		//IF CurrentWeapon is not null
+			/* Unsubscribe from weapon's events.*/
+			//CALL RemoveDynamic(this, &ACharacterBase::OnWeaponFired) on the CurrentWeapon's OnWeaponFired event
 
-		/* Reset weapon states states.*/
-        //SET bIsFiring to false
-	
-        //SET bIsAiming to false
+			/* Detach weapon from the character.*/
+			//CALL Detach() on the CurrentWeapon()
 
-    //ENDIF
+			//SET CurrentWeapon to null
+
+
+			/* Reset weapon states states.*/
+			//SET bIsFiring to false
+
+			//SET bIsAiming to false
+
+		//ENDIF
 }
 /*
 OnWeaponFired() is a callback function that is triggered by the Weapon. Here we simply play the animation if we are aiming or not
@@ -315,18 +327,18 @@ OnWeaponFired() is a callback function that is triggered by the Weapon. Here we 
 //Weapon Fired Event Handler
 void ACharacterBase::OnWeaponFired()
 {
-//TODO:
-    /* Play recoil animation depending on the stance.*/
-    //IF bIsAiming is true
-	    /*Play the Fire Aim Animation*/
-        //CALL Montage_Play(FireAimAnimation) on the AnimationInstance
-	
-    //ELSE
-	
-        /*Play the Fire Hip Animation*/
-        //CALL Montage_Play(FireHipAnimation) on the AnimationInstance
-	
-    //ENDIF
+	//TODO:
+		/* Play recoil animation depending on the stance.*/
+		//IF bIsAiming is true
+			/*Play the Fire Aim Animation*/
+			//CALL Montage_Play(FireAimAnimation) on the AnimationInstance
+
+		//ELSE
+
+			/*Play the Fire Hip Animation*/
+			//CALL Montage_Play(FireHipAnimation) on the AnimationInstance
+
+		//ENDIF
 }
 
 /*
@@ -337,30 +349,30 @@ void ACharacterBase::OnDeath()
 {
 	check(Health->IsDead() && "Called OnDeath() while alive!");
 
-//TODO:
-	/* Stop ticking while dead.*/
-    //SET PrimaryActorTick.bCanEverTick to false
-	
-	/* Drop held weapon.*/
-    //CALL DropWeapon
-	
+	//TODO:
+		/* Stop ticking while dead.*/
+		//SET PrimaryActorTick.bCanEverTick to false
 
-	/* Disable character's capsule collision.*/
+		/* Drop held weapon.*/
+		//CALL DropWeapon
+
+
+		/* Disable character's capsule collision.*/
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// Uncomment this code if you want to Allow character's ragdoll to be pushed around. 
-	
-    /*
+
+	/*
 	SkeletalMesh->SetCollisionProfileName(TEXT("BlockAll"));
 	SkeletalMesh->CanCharacterStepUpOn = ECB_No;
 	SkeletalMesh->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	*/
 
 	/* Simulate character's ragdoll.*/
-    //CALL SetCollisionEnabled() on the SkeletalMesh and pass in ECollisionEnabled::QueryAndPhysics
-	
-    //CALL SetSimulatePhysics() on the SkeletalMesh and pass in true
-	
+	//CALL SetCollisionEnabled() on the SkeletalMesh and pass in ECollisionEnabled::QueryAndPhysics
+
+	//CALL SetSimulatePhysics() on the SkeletalMesh and pass in true
+
 }
 
 AWeaponBase* ACharacterBase::GetCurrentWeapon()
