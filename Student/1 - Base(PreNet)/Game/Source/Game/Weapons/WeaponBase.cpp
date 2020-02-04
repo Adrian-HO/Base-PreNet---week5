@@ -28,14 +28,14 @@ void AWeaponBase::PostInitializeComponents()
 //TODO:
 	/* Get the root primitive component.*/
     //SET Primitive by Casting the RootComponent to a UPrimitiveComponent. CALL GetRootComponent(). The RootComponent is the weapon mesh.A StaticMeshComponent that will be added via the Blueprint for this Actor
-	
+	Primitive = Cast <UPrimitiveComponent> (RootComponent);
 
     /*Assert - If the Primitive is not null, continue, otherwise CRASH with the reason. Leave this commented*/
 	//check(Primitive != nullptr && "Actor is mising a primitive component!");
 
 	/* Get the muzzle arrow component.*/
     //DECLARE a auto variable called Components and SET it to the return value of GetComponents()
-	
+	Components = GetComponents();
     //FOR Each Component in Components	
         //IF Component->GetFName() IS "Muzzle"
             //SET the Muzzle to the Component, Cast it as a UArrowComponent

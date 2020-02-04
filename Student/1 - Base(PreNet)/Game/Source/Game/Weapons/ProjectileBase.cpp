@@ -29,7 +29,7 @@ void AProjectileBase::BeginPlay()
 //TODO:
 	/* Destroy the projectile after some time.*/
     //Un-Comment the line below
-	//GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectileBase::DestroySelf, LifeTime, false);
+	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectileBase::DestroySelf, LifeTime, false);
 }
 
 void AProjectileBase::Tick(float DeltaTime)
@@ -38,9 +38,9 @@ void AProjectileBase::Tick(float DeltaTime)
 //TODO:
 	/* Move the projectile in a forward direction.*/
     //Un-Comment the lines below
-	//FVector Location = GetActorLocation();
-	//Location += GetActorForwardVector() * Speed * DeltaTime;
-	//SetActorLocation(Location, true);
+	FVector Location = GetActorLocation();
+	Location += GetActorForwardVector() * Speed * DeltaTime;
+	SetActorLocation(Location, true);
 }
 
 void AProjectileBase::OnActorHit(AActor* Self, AActor* Other, FVector NormalImpulse, const FHitResult& Hit)
@@ -48,14 +48,14 @@ void AProjectileBase::OnActorHit(AActor* Self, AActor* Other, FVector NormalImpu
 //TODO:
 	// Cause damage to the hit actor.
     /*Un-Comment the lines below*/
-	//if(Other != nullptr)
-	//{
-		//FDamageEvent DamageEvent;
-		//Other->TakeDamage(Damage, DamageEvent, nullptr, this);
-	//}
+	if(Other != nullptr)
+	{
+		FDamageEvent DamageEvent;
+		Other->TakeDamage(Damage, DamageEvent, nullptr, this);
+	}
 
 	// Destroy self.
-	//Destroy();
+	Destroy();
 }
 
 void AProjectileBase::DestroySelf()

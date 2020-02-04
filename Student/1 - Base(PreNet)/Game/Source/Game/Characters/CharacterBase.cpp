@@ -53,14 +53,15 @@ void ACharacterBase::PostInitializeComponents()
 	/* Retrieve the health component. */
 //TODO:
     //SET Health to the return value of FindComponentByClass<UHealthComponent>()
-	
+	Health = FindComponentByClass<UHealthComponent>();
 	
     //check(Health != nullptr && "Character does not have a health component!");
 
 //TODO:
 	/* Subscribe to health component's OnDeath event.*/
     //IF Health NOT EQUAL to null
-	
+	if (Health)
+		Health->OnDeath.AddDynamic(this, &ACharacterBase::OnDeath);
         //SUBSCRIBE to the OnDeath Event in the Helth Component, with the OnDeath function
 	
     //ENDIF
@@ -68,7 +69,7 @@ void ACharacterBase::PostInitializeComponents()
 //TODO:
 	/*Retrieve the skeletal mesh component. */
     //SET SkeletalMesh to the return value of GetMesh()
-	
+	SkeletalMesh = GetMesh();
     //IF SkeletalMesh NOT EQUAL to null
 	if (SkeletalMesh != nullptr)
 	{
@@ -105,58 +106,63 @@ void ACharacterBase::Tick(float DeltaTime)
     
 //TODO:
     //IF bHasWeapon AND (bIsAiming OR bIsFiring)
-	
-        //CALL GetCharacterMovement() and SET bOrientRotationToMovement to false
-	
-        //IF bIsAiming	
-            //CALL GetCharacterMovement() and SET MaxWalkSpeed to MaxWalkSpeed (local variable)
-        //ENDIF
+	if (bHasWeapon && (bIsAiming || bIsFiring))
+	{
+		//CALL GetCharacterMovement() and SET bOrientRotationToMovement to false
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 
-        //IF bIsFiring
-            //CALL GetCharacterMovement() and SCALE (Multiply) MaxWalkSpeed by 0.8
-        //ENDIF
+		if (bIsAiming)
+			GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+		//IF bIsAiming	
+			//CALL GetCharacterMovement() and SET MaxWalkSpeed to MaxWalkSpeed (local variable)
+		//ENDIF
 
-        /* Rotate the character towards the aiming point.*/
-        //DECLARE a auto variable called PlayerController and assign it to this Characters Controller. Assign PlayerController as APlayerController 
+		if (bIsFiring)
+			GetCharacterMovement()->MaxWalkSpeed *= 0.8;
+			//CALL GetCharacterMovement() and SCALE (Multiply) MaxWalkSpeed by 0.8
+		//ENDIF
 
-        //IF PlayerController is valid
-            /* Cast cursor trace to world.*/
-            //DECLARE a FVector called MouseLocation
+		/* Rotate the character towards the aiming point.*/
+		//DECLARE a auto variable called PlayerController and assign it to this Characters Controller. Assign PlayerController as APlayerController 
 
-            //DECLARE a FVector called MouseDirection
+		//IF PlayerController is valid
+			/* Cast cursor trace to world.*/
+			//DECLARE a FVector called MouseLocation
 
-            //DECLARE a bool called Success and Assign it to the return value of PlayerController->DeprojectMousePositionToWorld(MouseLocation, MouseDirection). Lookup the function in the Documentation
+			//DECLARE a FVector called MouseDirection
 
-            /* Rotate the character towards the cursor.*/
-            //IF Success
-                /* Cast the cursor onto a plane. */
-                //DECLARE a FVector called LineBegin and Assign it to MouseLocation
+			//DECLARE a bool called Success and Assign it to the return value of PlayerController->DeprojectMousePositionToWorld(MouseLocation, MouseDirection). Lookup the function in the Documentation
 
-                //DECLARE a FVector called LineEnd and Assign it to MouseLocation  + MouseDirection * 10000.0f
+			/* Rotate the character towards the cursor.*/
+			//IF Success
+				/* Cast the cursor onto a plane. */
+				//DECLARE a FVector called LineBegin and Assign it to MouseLocation
 
-                //DECLARE a FVector PlaneOrigin and set it to the return value of CurrentWeapon->GetMuzzleLocation()
+				//DECLARE a FVector called LineEnd and Assign it to MouseLocation  + MouseDirection * 10000.0f
 
-                //DECLARE a FVector called PlaneNormal and SET it to FVector(0.0f, 0.0f, 1.0f)
+				//DECLARE a FVector PlaneOrigin and set it to the return value of CurrentWeapon->GetMuzzleLocation()
 
-
-                /*Find the intersection of a line and an offset plane. Assumes that the line and plane do indeed intersect */
-                //DECLARE a FVector called LookLocation and SET it to the return value of FMath::LinePlaneIntersection(LineBegin, LineEnd, PlaneOrigin, PlaneNormal)
-
-                // Rotate the cursor toward the intersection of the cursor and the plane.
-                //DECLARE a FRotator called LookRotation and Assign it to (LookLocation - GetActorLocation()).Rotation();
+				//DECLARE a FVector called PlaneNormal and SET it to FVector(0.0f, 0.0f, 1.0f)
 
 
-                //SET LookRotation Pitch to 0
+				/*Find the intersection of a line and an offset plane. Assumes that the line and plane do indeed intersect */
+				//DECLARE a FVector called LookLocation and SET it to the return value of FMath::LinePlaneIntersection(LineBegin, LineEnd, PlaneOrigin, PlaneNormal)
 
-                //SET LookRotation Roll to 0
+				// Rotate the cursor toward the intersection of the cursor and the plane.
+				//DECLARE a FRotator called LookRotation and Assign it to (LookLocation - GetActorLocation()).Rotation();
 
 
-                /*Slerp to the new rotation*/
-                //CALL SetActorRotation() pass in FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f)
+				//SET LookRotation Pitch to 0
 
-            //ENDIF Success
-        //ENDIF (PlayerController)
-    //ENDIF bHasWeapon AND (bIsAiming OR bIsFiring)
+				//SET LookRotation Roll to 0
+
+
+				/*Slerp to the new rotation*/
+				//CALL SetActorRotation() pass in FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f)
+
+			//ENDIF Success
+		//ENDIF (PlayerController)
+	} //ENDIF bHasWeapon AND (bIsAiming OR bIsFiring)
 
 //TODO:
     /* Set animation weapon parameters.*/
