@@ -30,8 +30,7 @@ void UHealthComponent::InitializeComponent()
 
 //TODO:
 	// Subscribe to the delegate in the attached actor.
-    //Un-Comment the line below
-	//GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::OnTakeAnyDamage);
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::OnTakeAnyDamage);
 }
 
 void UHealthComponent::BeginPlay()
@@ -41,11 +40,11 @@ void UHealthComponent::BeginPlay()
 //TODO:
 	// Broadcast actor's death event if initial health is zero.
     //Un-Comment the lines below
-	//if(CurrentHealth == 0.0f)
-	//{
+	if(CurrentHealth == 0.0f)
+	{
         /*This will trigger all functions that are subscribed to this event. */
-	    //OnDeath.Broadcast();
-	//}
+	    OnDeath.Broadcast();
+	}
 }
 
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -59,19 +58,19 @@ void UHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const
     //Un-Comment the Lines below
     
 	/* Check if already dead.*/
-	//if(IsDead())
-	//	return;
+	if(IsDead())
+		return;
 
 	/* Update the current health value.*/
-	//CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
+	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaximumHealth);
 
 	/* Handle current health value reaching zero.*/
-	//if(CurrentHealth <= 0.0f)
-	//{
+	if(CurrentHealth <= 0.0f)
+	{
         /*This will trigger all functions that are subscribed to this event. 
 		Broadcast actor's death event.*/
-	//	OnDeath.Broadcast();
-	//}
+		OnDeath.Broadcast();
+	}
 }
 
 bool UHealthComponent::IsDead() const
