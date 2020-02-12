@@ -1,0 +1,235 @@
+Install Visual Assist. There will be a little refactoring involved.
+
+------------------------------------------------------------------------------------------------------------------------------
+In WeaponBase.h:
+Make the following Variables Replicate by Adding the Replicated parameter to the UPROPERTY()
+FireRate
+MaximumAmmo
+CurrentAmmo
+
+Add the following Functions:
+//This is for Listen Client Mode
+UFUNCTION(Server, Reliable, WithValidation)
+		void ServerFire();
+
+//This is for Dedicated Server Mode
+UFUNCTION(NetMulticast, Reliable)	
+		void NetMulticastFire();
+
+virtual void SpawnProjectile();
+
+In WeaponBase.cpp
+In the Constructor:
+CALL SetReplicates() and pass in true
+CALL SetReplicateMovement() and pass in true
+
+In SpawnProjectile():
+CUT all the code in the Fire() function and Move it to SpawnProjectile(). Leave the Fire() FUnction Empty for now.
+
+In ServerFire_Implementation():
+        //IF The Network Mode is ENetMode::NM_DedicatedServer
+            //CALL NetMulticastFire()
+        //ENDIF
+
+        //IF The Network Mode is NOT ENetMode::NM_DedicatedServer        
+            //CALL SpawnProjectile()
+        //ENDIF
+
+In NetMulticastFire_Implementation()
+    //IF Role is LESS THAN ROLE_Authority
+        //CALL SpawnProjectile()
+    //ENDIF
+
+Finally In Fire() :
+
+    CALL ServerFire()
+
+In GetLifetimeReplicatedProps(...)
+Replicate the FireRate, MaximumAmmo, and CurrentAmmo
+
+------------------------------------------------------------------------------------------------------------------------------
+In CharacterBaseAnimation.h:
+Make the following Variables Replicate by Adding the Replicated parameter to the UPROPERTY()
+Add and Replicate bool bHasWeapon;
+bIsAiming
+
+In CharacterBaseAnimation.cpp:
+In GetLifetimeReplicatedProps(..)
+Replicate bHasWeapon, bIsAiming
+
+------------------------------------------------------------------------------------------------------------------------------
+In CharacterBase.h
+Make the following Variables Replicate by Adding the Replicated parameter to the UPROPERTY()
+CurrentWeapon:AWeaponBase
+bIsAiming:bool 
+bHasWeapon:bool
+bIsFiring:bool
+CurrentFacing:FVector
+
+Add the following Variables and make them Replicated:
+bHasWeapon:bool
+CurrentFacing:FVector
+NoiseEmitterComponent: UPawnNoiseEmitterComponent*
+
+Add The Following Functions:
+AttachCurrentWeapon();
+void ChangeFacing(FVector TargetVector);
+class UHealthComponent* GetHealth() { return Health; }
+UFUNCTION(NetMulticast, Reliable, WithValidation)
+		void NetMulticastOnDeath();
+UFUNCTION(Reliable, Server, WithValidation)
+		virtual void ServerApplyDamage();
+UFUNCTION(Reliable, Server, WithValidation)
+		void ServerChangeFacing(FVector TargetVector);
+
+Refactor:
+Aim() TO UFUNCTION(Reliable, Server, WithValidation)
+	        void ServerAim(bool Toggle);
+
+DropWeapon() TO UFUNCTION(Server, Reliable, WithValidation)
+	                void ServerDropWeapon();
+
+HoldWeapon(class AWeaponBase* Weapon) TO UFUNCTION(Server, Reliable, WithValidation)
+	                                        void ServerHoldWeapon(class AWeaponBase* Weapon);
+                                          
+In CharacterBase.cpp
+In The Constructor():
+CALL SetReplicates() and pass in true
+CALL SetReplicateMovement() and pass in true
+
+CREATE/INITIALIZE the NoiseEmitterComponent
+
+In Tick():
+Change:
+const bool bHasWeapon = CurrentWeapon != nullptr;
+TO
+bHasWeapon = CurrentWeapon != nullptr;
+
+Change:
+SetActorRotation(FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f));
+TO
+FRotator rot = FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f);
+ChangeFacing(rot.Vector());
+
+In ChangeFAcing(FVector TargetVector):
+    //CALL SetActorRotation() and pass in TargetVector.Rotation()
+    SET/ASSIGN CurrentFAcing to TargetVector
+    //IF Role is LESS THAN ROLE_Authority
+	    //CALL ServerChangeFacing() and pass in CurrentFacing
+    //ENDIF
+
+In ServerChangeFacing_Implementation(FVector TargetVector):
+    CALL ChangeFacing() and Pass in TargetVector
+
+In ServerAim_Implementation(bool Toggle):
+    SET/ASSIGN bIsAiming to Toggle   
+
+In Interact(AActor* Actor)
+CHANGE DropWeapon() TO ServerDropWeapon()
+CHANGE HoldWeapon(Weapon) TO ServerHoldWeapon(Weapon)
+    
+In ServerHoldWeapon_Implementation(AWeaponBase* Weapon):
+Delete everything and Code this:
+    //CALL ServerDropWeapon()
+
+    //IF CurrentWeapon is nullptr
+        //IF the ROle is Role_Authority
+            //SET/ASSIGN CurrentWeapon to Weapon
+
+            //CALL AttachCurrentWeapon()
+        //ENDIF
+    //ENDIF
+
+In AttachCurrentWeapon(): You Can just CUt and paste the relevant code from HoldWeapon()/ServerHoldWepon_Impl()
+    //IF CurrentWeapon is NOT nullptr
+        //CALL Attach() on the CUrrentWeapon and pass in this
+
+        //CALL Clear() on the CurrentWeapon's OnWeaponFired Event/Delegate
+
+        //SUBSCRIBE to the CUrrentWeapon's OnWeaponFired Event/Delegate
+
+    //ENDIF
+
+In ServerDropWeapon_Implementation():
+NO CHANGES
+
+In OnDeath():
+RENAME:
+ DropWeapon() to ServerDropWeapon()
+ AND ADD:
+ CALL NetMulticastOnDeath()
+
+CUT:
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	SkeletalMesh->SetSimulatePhysics(true);
+AND MOVE IT TO NetMulticastOnDeath_Implementation()
+
+In ServerApplyDamage_Implementation()
+ //DECLARE a FDamageEvent and call it DamageEvent;
+ //CALL	TakeDamage() and Pass in (10.0f, DamageEvent, nullptr, this)
+
+In GetLifetimeReplicatedProps(...)
+Replicate:
+CurrentWeapon
+CurrentFacing
+bIsAiming
+bIsFiring
+bHasWeapon
+
+------------------------------------------------------------------------------------------------------------------------------
+In ProjectileBase.h
+NO CHANGES
+
+In ProjectileBase.cpp
+
+In The Constructor():
+CALL SetReplicates() and pass in true
+CALL SetReplicateMovement() and pass in true
+
+In OnActorHit(...)
+Remove all existing Code and Implement:
+    //IF Other is NOT nullptr	
+        //IF Role is Role_Authority
+            //CALL MakeNoise() and pass in 1.0f, Instigator
+
+            //CAST Other to a ACharacterBase* variable called CharacterB
+
+            //IF CharacterBase is valid
+                //DECLARE a AActor* called Weapon and assign it to the return value of GetOwner()
+
+                //DECLARE a AActor* called Character and assign it to the return value of the Weapon's GetOwner()
+	
+                //Draw a debug Message to display the Character Name
+
+                //CALL ServerApplyDamage() on CharacterBase
+
+            //ENDIF
+
+            //CALL Destroy()
+
+        //ENDIF		
+    //ENDIF
+
+In DestroySelf()
+    //IF Role is Role_Authority	
+        //CALL Destroy()
+    //ENDIF
+
+------------------------------------------------------------------------------------------------------------------------------
+In HealthComponent.h
+Make the following Variables Replicate by Adding the Replicated parameter to the UPROPERTY():
+CurrentHealth
+
+In HealthComponent.cpp
+In The Constructor()
+//CALL SetIsReplicated() and pass in true. Note this is different from a actor
+
+In GetLifetimeReplicatedProps(...)
+Replicate CurrentHealth
+
+------------------------------------------------------------------------------------------------------------------------------
+
+Add/Implement AICharacterBase:
+
+

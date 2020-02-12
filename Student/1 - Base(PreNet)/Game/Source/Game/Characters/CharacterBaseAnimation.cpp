@@ -2,6 +2,7 @@
 
 #include "CharacterBaseAnimation.h"
 #include "Game.h"
+#include "Net/UnrealNetwork.h"
 
 UCharacterBaseAnimation::UCharacterBaseAnimation() :
 	bHasWeapon(false),
@@ -23,4 +24,12 @@ void UCharacterBaseAnimation::NativeInitializeAnimation()
 void UCharacterBaseAnimation::NativeUpdateAnimation(float DeltaTime)
 {
 	Super::NativeUpdateAnimation(DeltaTime);
+}
+
+void UCharacterBaseAnimation::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCharacterBaseAnimation, bHasWeapon);
+	DOREPLIFETIME(UCharacterBaseAnimation, bIsAiming);
 }

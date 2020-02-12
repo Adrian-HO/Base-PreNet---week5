@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\Game.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{1701906D-D896-428F-99D4-D4A3BDBAD3A9}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Game.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\GameEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{2D0AF8C2-582F-4BE2-9D68-8425BE8369E1}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{B2CE0F00-E260-4FB3-A22C-8B9254AADEAB}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\Game\Game.Build.cs">
+      <Filter>Source\Game</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\Game\Game.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Game.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <Filter Include="Source\Game\Characters">
+      <UniqueIdentifier>{AF02BB78-B3C8-4ABC-A040-21E65C6BF6CC}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Game\Characters\CharacterBase.cpp">
+      <Filter>Source\Game\Characters</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Characters\CharacterBase.h">
+      <Filter>Source\Game\Characters</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Game\Characters\CharacterBaseAnimation.cpp">
+      <Filter>Source\Game\Characters</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Characters\CharacterBaseAnimation.h">
+      <Filter>Source\Game\Characters</Filter>
+    </ClInclude>
+    <Filter Include="Source\Game\Gameplay">
+      <UniqueIdentifier>{0C09F4F0-12B9-4D47-A139-76D1D5223661}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Game\Gameplay\GameModeDefault.cpp">
+      <Filter>Source\Game\Gameplay</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Gameplay\GameModeDefault.h">
+      <Filter>Source\Game\Gameplay</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Game\Gameplay\PlayerControllerDefault.cpp">
+      <Filter>Source\Game\Gameplay</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Gameplay\PlayerControllerDefault.h">
+      <Filter>Source\Game\Gameplay</Filter>
+    </ClInclude>
+    <Filter Include="Source\Game\Gameplay\Health">
+      <UniqueIdentifier>{B143F4A1-CB1F-492F-ABA0-45A533B7C170}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Game\Gameplay\Health\HealthComponent.cpp">
+      <Filter>Source\Game\Gameplay\Health</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Gameplay\Health\HealthComponent.h">
+      <Filter>Source\Game\Gameplay\Health</Filter>
+    </ClInclude>
+    <Filter Include="Source\Game\Items">
+      <UniqueIdentifier>{B4DB0446-33F0-48E1-A632-82C93F38ECFD}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Game\Items\ItemBase.cpp">
+      <Filter>Source\Game\Items</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Items\ItemBase.h">
+      <Filter>Source\Game\Items</Filter>
+    </ClInclude>
+    <Filter Include="Source\Game\Weapons">
+      <UniqueIdentifier>{6F2684C9-61AF-4A93-9AB2-44D6777D1CE9}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\Game\Weapons\ProjectileBase.cpp">
+      <Filter>Source\Game\Weapons</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Weapons\ProjectileBase.h">
+      <Filter>Source\Game\Weapons</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\Game\Weapons\WeaponBase.cpp">
+      <Filter>Source\Game\Weapons</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\Game\Weapons\WeaponBase.h">
+      <Filter>Source\Game\Weapons</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -3,12 +3,17 @@
 #include "CharacterBase.h"
 #include "Game.h"
 #include "CharacterBaseAnimation.h"
-
+#include "Net/UnrealNetwork.h"
 #include <GameFramework/PlayerController.h>
 #include "Gameplay/Health/HealthComponent.h"
 #include "Weapons/WeaponBase.h"
 #include "Items/ItemBase.h"
 #include "Math/UnrealMathUtility.h"
+#include "Components/PawnNoiseEmitterComponent.h"
+
+void ACharacterBase::ServerChangeFacing(FVector TargetVector)
+{
+}
 
 /*
 Setup the character defaults
@@ -41,6 +46,11 @@ ACharacterBase::ACharacterBase() :
 
 	bIsAiming = false;
 	bIsFiring = false;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
+
+	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>("NoiseEmitter");;
 }
 
 /*
@@ -86,7 +96,7 @@ void ACharacterBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	/* Check if we have a weapon.*/
-	const bool bHasWeapon = CurrentWeapon != nullptr;
+	bHasWeapon = CurrentWeapon != nullptr;
 
 	/* Handle movement orientation and speed. */
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -130,7 +140,8 @@ void ACharacterBase::Tick(float DeltaTime)
 				LookRotation.Roll = 0;
 
 				/*Slerp to the new rotation*/
-				SetActorRotation(FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f));
+				FRotator rot = FMath::RInterpTo(GetActorRotation(), LookRotation, DeltaTime, 10.0f);
+				ChangeFacing(rot.Vector());
 			}
 		}
 	}
@@ -192,10 +203,11 @@ void ACharacterBase::Fire(bool Toggle)
 	}
 }
 
-void ACharacterBase::Aim(bool Toggle)
+void ACharacterBase::ServerAim_Implementation(bool Toggle)
 {
 	bIsAiming = Toggle;
 }
+
 
 /*
 Interact() Handles interacting with Items. In our case Weapons. We first Drop a weapon (If we have one) then Hold the one that is picked up.
@@ -204,7 +216,7 @@ This function is called by InteractPressed() in the APlayerControllerDefault cla
 void ACharacterBase::Interact(AActor* Actor)
 {
 	/* Drop the current weapon.*/
-	DropWeapon();
+	ServerDropWeapon_Implementation();
 	/* Check if the actor is an item.*/
 	AItemBase* Item = Cast<AItemBase>(Actor);
 	if (Item == nullptr)
@@ -218,17 +230,17 @@ void ACharacterBase::Interact(AActor* Actor)
 	AWeaponBase* Weapon = Cast<AWeaponBase>(Item);
 
 	if (Weapon)
-		HoldWeapon(Weapon);
+		ServerHoldWeapon_Implementation(Weapon);
 }
 
 /*
 HoldWeapon() will attach the weapon that is picked up by the Character
 */
-void ACharacterBase::HoldWeapon(AWeaponBase* Weapon)
+void ACharacterBase::ServerHoldWeapon_Implementation(AWeaponBase* Weapon)
 {
 	check(Weapon != nullptr && "Passed a null weapon!");
 	// Drop currently carried weapon first.
-	DropWeapon();
+	ServerDropWeapon_Implementation();
 	// Attach weapon to the character.
 	CurrentWeapon = Weapon;
 	CurrentWeapon->Attach(this);
@@ -238,11 +250,11 @@ void ACharacterBase::HoldWeapon(AWeaponBase* Weapon)
 /*
 DropWeapon() will detach the Weapon Currently held by the character
 */
-void ACharacterBase::DropWeapon()
+void ACharacterBase::ServerDropWeapon_Implementation()
 {
 	if (CurrentWeapon != nullptr)
 	{
-		
+
 		CurrentWeapon->OnWeaponFired.RemoveDynamic(this, &ACharacterBase::OnWeaponFired);
 		/* Detach weapon from the character.*/
 		CurrentWeapon->Detach();
@@ -259,7 +271,7 @@ OnWeaponFired() is a callback function that is triggered by the Weapon. Here we 
 //Weapon Fired Event Handler
 void ACharacterBase::OnWeaponFired()
 {
-		/* Play recoil animation depending on the stance.*/
+	/* Play recoil animation depending on the stance.*/
 	if (bIsAiming == true)
 	{
 		AnimationInstance->Montage_Play(FireAimAnimation);
@@ -282,7 +294,7 @@ void ACharacterBase::OnDeath()
 	PrimaryActorTick.bCanEverTick = false;
 
 	/* Drop held weapon.*/
-	DropWeapon();
+	ServerDropWeapon_Implementation();
 
 	/* Disable character's capsule collision.*/
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -306,4 +318,16 @@ AWeaponBase* ACharacterBase::GetCurrentWeapon()
 class USkeletalMeshComponent* ACharacterBase::GetSkeletalMesh()
 {
 	return SkeletalMesh;
+}
+
+void ACharacterBase::AttachCurrentWeapon()
+{
+}
+
+void ACharacterBase::ChangeFacing(FVector TargetVector)
+{
+	SetActorRotation(TargetVector.Rotation());
+	CurrentFacing = TargetVector;
+	if (GetLocalRole() < ROLE_Authority)
+		ServerChangeFacing(CurrentFacing);
 }

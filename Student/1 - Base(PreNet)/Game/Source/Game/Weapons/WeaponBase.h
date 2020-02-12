@@ -14,13 +14,13 @@ class GAME_API AWeaponBase : public AItemBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(Replicated, EditDefaultsOnly)
 	float FireRate;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly)
 	int MaximumAmmo;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly)
 	int CurrentAmmo;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -41,11 +41,20 @@ public:
 protected:
 	AWeaponBase();
 
+	//This is for Listen Client Mode
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerFire();
+
+	//This is for Dedicated Server Mode
+	UFUNCTION(NetMulticast, Reliable)
+		void NetMulticastFire();
+
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
 	void Fire();
+	virtual void SpawnProjectile();
 
 private:
 	void ClearFireTimer();

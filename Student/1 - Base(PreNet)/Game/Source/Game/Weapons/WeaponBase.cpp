@@ -9,8 +9,8 @@
 #include "Characters/CharacterBase.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
-
 #include "ProjectileBase.h"
+#include "Net/UnrealNetwork.h"
 
 AWeaponBase::AWeaponBase() :
 	Primitive(nullptr),
@@ -23,6 +23,29 @@ AWeaponBase::AWeaponBase() :
 
 	MaximumAmmo = 30;
 	CurrentAmmo = -1;
+	SetReplicates(true);
+	SetReplicateMovement(true);
+}
+
+void AWeaponBase::ServerFire_Implementation()
+{
+	if (GetNetMode() == ENetMode::NM_DedicatedServer)
+		NetMulticastFire();
+
+
+	if (GetNetMode() != ENetMode::NM_DedicatedServer)
+		SpawnProjectile();
+}
+
+bool AWeaponBase::ServerFire_Validate()
+{
+	return true;
+}
+
+void AWeaponBase::NetMulticastFire_Implementation()
+{
+	if (GetLocalRole() < ROLE_Authority)
+		SpawnProjectile();
 }
 
 void AWeaponBase::PostInitializeComponents()
@@ -85,7 +108,6 @@ void AWeaponBase::Attach(class ACharacterBase* Character)
 
 void AWeaponBase::Detach()
 {
-	//TODO:
 		/* Stop firing when the weapon is detached.*/
 	ReleaseTrigger();
 	/* Unset owner of the weapon.*/
@@ -126,6 +148,11 @@ void AWeaponBase::ReleaseTrigger()
 
 void AWeaponBase::Fire()
 {
+	ServerFire();
+}
+
+void AWeaponBase::SpawnProjectile()
+{
 	/* Check current ammo value before actually firing.*/
 	if (CurrentAmmo > 0)
 	{
@@ -149,4 +176,13 @@ void AWeaponBase::ClearFireTimer()
 FVector AWeaponBase::GetMuzzleLocation() const
 {
 	return Muzzle->GetComponentToWorld().GetLocation();
+}
+
+void AWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AWeaponBase, FireRate);
+	DOREPLIFETIME(AWeaponBase, MaximumAmmo);
+	DOREPLIFETIME(AWeaponBase, CurrentAmmo);
 }

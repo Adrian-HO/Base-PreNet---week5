@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "Game",
+			"Path": "C:\\Users\\ho000086\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\Game.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "GameEditor",
+			"Path": "C:\\Users\\ho000086\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\GameEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

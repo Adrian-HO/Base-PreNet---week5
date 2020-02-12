@@ -11,12 +11,14 @@ UHealthComponent::UHealthComponent()
 	// Set default values.
 	MaximumHealth = 100.0f;
 	CurrentHealth = -1.0f;
+
+	SetIsReplicated(true);
 }
 
 void UHealthComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
-
+	SetIsReplicated(true);
 	// Sanitize default values.
     
 	MaximumHealth = FMath::Max(1.0f, MaximumHealth);

@@ -1,0 +1,57 @@
+﻿  Parsing headers for GameEditor
+    Running UnrealHeaderTool "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Game.uproject" "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\GameEditor\Development\GameEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
+  Reflection code generated for GameEditor in 4.8189303 seconds
+  Building GameEditor...
+  Using Visual Studio 2017 14.16.27034 toolchain (C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023) and Windows 10.0.17763.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+  [Upgrade]
+  [Upgrade] Using backward-compatible build settings. The latest version of UE4 sets the following values by default, which may require code changes:
+  [Upgrade]     bLegacyPublicIncludePaths = false                 => Omits subfolders from public include paths to reduce compiler command line length. (Previously: true).
+  [Upgrade]     ShadowVariableWarningLevel = WarningLevel.Error   => Treats shadowed variable warnings as errors. (Previously: WarningLevel.Warning).
+  [Upgrade]     PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs   => Set in build.cs files to enables IWYU-style PCH model. See https://docs.unrealengine.com/en-US/Programming/BuildTools/UnrealBuildTool/IWYU/index.html. (Previously: PCHUsageMode.UseSharedPCHs).
+  [Upgrade] Suppress this message by setting 'DefaultBuildSettings = BuildSettingsVersion.V2;' in GameEditor.Target.cs, and explicitly overriding settings that differ from the new defaults.
+  [Upgrade]
+  Building 10 actions with 8 processes...
+    [1/10] Game.init.gen.cpp
+    [2/10] CharacterBaseAnimation.gen.cpp
+    [3/10] CharacterBase.gen.cpp
+    [4/10] PlayerControllerDefault.cpp
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Gameplay\PlayerControllerDefault.cpp(80): error C2039: 'Aim': is not a member of 'ACharacterBase'
+    C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters/CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Gameplay\PlayerControllerDefault.cpp(88): error C2039: 'Aim': is not a member of 'ACharacterBase'
+    C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters/CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+    [5/10] CharacterBase.cpp
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(89): warning C4458: declaration of 'bHasWeapon' hides class member
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(99): note: see declaration of 'ACharacterBase::bHasWeapon'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(201): error C2556: 'void ACharacterBase::ServerAim_Validate(bool)': overloaded function differs only by return type from 'bool ACharacterBase::ServerAim_Validate(bool)'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(13): note: see declaration of 'ACharacterBase::ServerAim_Validate'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(200): error C2371: 'ACharacterBase::ServerAim_Validate': redefinition; different basic types
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(13): note: see declaration of 'ACharacterBase::ServerAim_Validate'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(213): error C3861: 'DropWeapon': identifier not found
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(227): error C3861: 'HoldWeapon': identifier not found
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(233): error C2039: 'HoldWeapon': is not a member of 'ACharacterBase'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(237): error C3861: 'DropWeapon': identifier not found
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(239): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(240): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(240): error C2355: 'this': can only be referenced inside non-static member functions or non-static data member initializers
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(241): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(242): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(242): error C2355: 'this': can only be referenced inside non-static member functions or non-static data member initializers
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(242): error C2248: 'ACharacterBase::OnWeaponFired': cannot access protected member declared in class 'ACharacterBase'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(67): note: see declaration of 'ACharacterBase::OnWeaponFired'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(247): error C2039: 'DropWeapon': is not a member of 'ACharacterBase'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(249): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(252): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(252): error C2355: 'this': can only be referenced inside non-static member functions or non-static data member initializers
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(252): error C2248: 'ACharacterBase::OnWeaponFired': cannot access protected member declared in class 'ACharacterBase'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(67): note: see declaration of 'ACharacterBase::OnWeaponFired'
+    c:\users\ho000086\desktop\base-prenet---week5\student\1 - base(prenet)\game\source\game\characters\CharacterBase.h(11): note: see declaration of 'ACharacterBase'
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(254): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(255): error C2065: 'CurrentWeapon': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(257): error C2065: 'bIsFiring': undeclared identifier
+C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Source\Game\Characters\CharacterBase.cpp(258): error C2065: 'bIsAiming': undeclared identifier
+    [6/10] WeaponBase.cpp
+    [7/10] CharacterBaseAnimation.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\VCTargets\Microsoft.MakeFile.Targets(44,5): error MSB3075: The command ""C:\Program Files\Epic Games\UE_4.24\Engine\Build\BatchFiles\Build.bat" GameEditor Win64 Development -Project="C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Game.uproject" -WaitMutex -FromMsBuild" exited with code 5. Please verify that you have sufficient rights to run this command.

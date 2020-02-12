@@ -14,31 +14,47 @@ class GAME_API ACharacterBase : public ACharacter
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-	float MaxWalkSpeed;
+		float MaxWalkSpeed;
 
 	UPROPERTY(EditDefaultsOnly)
-	float MaxJogSpeed;
+		float MaxJogSpeed;
 
 	UPROPERTY(EditDefaultsOnly)
-	float MaxPickUpDistance;
+		float MaxPickUpDistance;
 
 	UPROPERTY(EditDefaultsOnly)
-	UAnimMontage* FireHipAnimation; //Animation Sequence for Firing from the Hip
+		UAnimMontage* FireHipAnimation; //Animation Sequence for Firing from the Hip
 
 	UPROPERTY(EditDefaultsOnly)
-	UAnimMontage* FireAimAnimation; //Animation Sequence for Firing while Aiming
+		UAnimMontage* FireAimAnimation; //Animation Sequence for Firing while Aiming
 
 	UFUNCTION(BlueprintPure)
-	class AWeaponBase* GetCurrentWeapon();
+		class AWeaponBase* GetCurrentWeapon();
 
 public:
 	void Move(FVector Direction, float Scale);
 	void Fire(bool Toggle);
-	void Aim(bool Toggle);
+
+	UFUNCTION(Reliable, Server, WithValidation)
+		void ServerAim(bool Toggle);
 
 	void Interact(AActor* Actor);
 
 	class USkeletalMeshComponent* GetSkeletalMesh();
+	void AttachCurrentWeapon();
+
+	void ChangeFacing(FVector TargetVector);
+
+	class UHealthComponent* GetHealth() { return Health; }
+
+	UFUNCTION(NetMulticast, Reliable, WithValidation)
+		void NetMulticastOnDeath();
+
+	UFUNCTION(Reliable, Server, WithValidation)
+		virtual void ServerApplyDamage();
+
+	UFUNCTION(Reliable, Server, WithValidation)
+		void ServerChangeFacing(FVector TargetVector);
 
 protected:
 	ACharacterBase();
@@ -48,23 +64,37 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void OnWeaponFired(); //Handle the OnWeaponFired Event
+		void OnWeaponFired(); //Handle the OnWeaponFired Event
 
 	UFUNCTION()
-	void OnDeath(); //Handle the OnDeath Event
+		void OnDeath(); //Handle the OnDeath Event
+
+	UPawnNoiseEmitterComponent* NoiseEmitterComponent;
 
 private:
-	void HoldWeapon(class AWeaponBase* Weapon);
-	void DropWeapon();
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerHoldWeapon(class AWeaponBase* Weapon);
 
-private: //Class Components
+	UFUNCTION(Server, Reliable, WithValidation)
+		void ServerDropWeapon();
+
+public: //Class Components
 	class UHealthComponent* Health;
 	class USkeletalMeshComponent* SkeletalMesh;
 	class UCharacterBaseAnimation* AnimationInstance;
 
-	UPROPERTY()
-	class AWeaponBase* CurrentWeapon; //Currently Held Weapon
+	UPROPERTY(Replicated)
+		class AWeaponBase* CurrentWeapon; //Currently Held Weapon
 
-	bool bIsAiming;
-	bool bIsFiring;
+	UPROPERTY(Replicated)
+		bool bIsAiming;
+
+	UPROPERTY(Replicated)
+		bool bIsFiring;
+
+	UPROPERTY(Replicated)
+		FVector CurrentFacing;
+
+	UPROPERTY(Replicated)
+		bool bHasWeapon;
 };

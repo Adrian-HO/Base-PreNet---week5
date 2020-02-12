@@ -13,10 +13,10 @@ class GAME_API UCharacterBaseAnimation : public UAnimInstance
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	bool bHasWeapon;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
 	bool bIsAiming;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
