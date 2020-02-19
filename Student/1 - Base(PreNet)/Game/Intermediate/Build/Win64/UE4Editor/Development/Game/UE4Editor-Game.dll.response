@@ -33,6 +33,7 @@
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\GameEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\AICharacterBase.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\CharacterBase.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\CharacterBaseAnimation.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\HealthComponent.cpp.obj"
@@ -42,6 +43,7 @@
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\ProjectileBase.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\WeaponBase.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\Game.cpp.obj"
+"C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\AICharacterBase.gen.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\CharacterBase.gen.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\CharacterBaseAnimation.gen.cpp.obj"
 "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\UE4Editor\Development\Game\Game.init.gen.cpp.obj"

@@ -102,4 +102,14 @@
       <Filter>Source\Game\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\Game\Characters\AICharacterBase.h">
+      <Filter>Source\Game\Characters</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\Game\Characters\AICharacterBase.cpp">
+      <Filter>Source\Game\Characters</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

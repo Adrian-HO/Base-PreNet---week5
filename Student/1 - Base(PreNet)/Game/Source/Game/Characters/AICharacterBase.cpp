@@ -11,6 +11,7 @@
 #include "Weapons/WeaponBase.h"
 #include "Gameplay/Health/HealthComponent.h"
 
+
 AAICharacterBase::AAICharacterBase() : Super()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -38,7 +39,7 @@ void AAICharacterBase::BeginPlay()
 	{
 		MoveToNextPatrolPoint();
 	}
-	if (Role == ROLE_Authority)
+	if (GetLocalRole() == ROLE_Authority)
 	{
 		// Spawn a projectile.
 		FActorSpawnParameters SpawnParams;
@@ -68,7 +69,7 @@ void AAICharacterBase::OnPawnSeen(APawn* SeenPawn)
 	TargetActor = SeenPawn;
 	DrawDebugSphere(GetWorld(), SeenPawn->GetActorLocation(), 32.0f, 12, FColor::Red, false, 10.0f);
 	UE_LOG(LogTemp, Warning, TEXT("Seen"));
-	
+
 	SetGuardState(EAIState::Alerted);
 
 	CurrentWeapon->PullTrigger();
@@ -97,7 +98,7 @@ void AAICharacterBase::OnNoiseHeard(APawn* NoiseInstigator, const FVector& Locat
 	FVector Direction = Location - GetActorLocation();
 	Direction.Normalize();
 
-    FRotator NewLookAt = FRotationMatrix::MakeFromX(Direction).Rotator(); //Can use the one in kismet library (LookAt()) X is to look forward dir
+	FRotator NewLookAt = FRotationMatrix::MakeFromX(Direction).Rotator(); //Can use the one in kismet library (LookAt()) X is to look forward dir
 	NewLookAt.Pitch = 0.0f;
 	NewLookAt.Roll = 0.0f;
 	SetActorRotation(NewLookAt);
@@ -130,7 +131,7 @@ void AAICharacterBase::ResetPatrol()
 {
 	TargetActor = nullptr;
 	SetGuardState(EAIState::Idle);
-	if(CurrentWeapon)
+	if (CurrentWeapon)
 		CurrentWeapon->ReleaseTrigger();
 
 	//Stop Investigating ... if we are a patrolling pawn. Pick a new Patrol point to move to
@@ -166,7 +167,7 @@ void AAICharacterBase::MoveToNextPatrolPoint()
 	{
 		CurrentPatrolPoint = SecondPatrolPoint;
 	}
-    UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), CurrentPatrolPoint);
+	UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), CurrentPatrolPoint);
 }
 
 void AAICharacterBase::Tick(float DeltaTime)

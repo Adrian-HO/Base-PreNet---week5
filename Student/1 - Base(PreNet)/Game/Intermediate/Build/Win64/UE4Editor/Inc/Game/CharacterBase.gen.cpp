@@ -279,7 +279,7 @@ void EmptyLinkFunctionForGeneratedCodeCharacterBase() {}
 		{ "ModuleRelativePath", "Characters/CharacterBase.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACharacterBase, nullptr, "ServerDropWeapon", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x80240CC1, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACharacterBase, nullptr, "ServerDropWeapon", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x80280CC0, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerDropWeapon_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_ACharacterBase_ServerDropWeapon()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -307,7 +307,7 @@ void EmptyLinkFunctionForGeneratedCodeCharacterBase() {}
 		{ "ModuleRelativePath", "Characters/CharacterBase.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACharacterBase, nullptr, "ServerHoldWeapon", nullptr, nullptr, sizeof(CharacterBase_eventServerHoldWeapon_Parms), Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x80240CC1, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACharacterBase, nullptr, "ServerHoldWeapon", nullptr, nullptr, sizeof(CharacterBase_eventServerHoldWeapon_Parms), Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x80280CC0, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -387,8 +387,8 @@ void EmptyLinkFunctionForGeneratedCodeCharacterBase() {}
 		{ &Z_Construct_UFunction_ACharacterBase_ServerAim, "ServerAim" }, // 75083472
 		{ &Z_Construct_UFunction_ACharacterBase_ServerApplyDamage, "ServerApplyDamage" }, // 2936395921
 		{ &Z_Construct_UFunction_ACharacterBase_ServerChangeFacing, "ServerChangeFacing" }, // 577233223
-		{ &Z_Construct_UFunction_ACharacterBase_ServerDropWeapon, "ServerDropWeapon" }, // 800100467
-		{ &Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon, "ServerHoldWeapon" }, // 2958115401
+		{ &Z_Construct_UFunction_ACharacterBase_ServerDropWeapon, "ServerDropWeapon" }, // 3490638259
+		{ &Z_Construct_UFunction_ACharacterBase_ServerHoldWeapon, "ServerHoldWeapon" }, // 29044402
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ACharacterBase_Statics::Class_MetaDataParams[] = {
@@ -519,7 +519,7 @@ void EmptyLinkFunctionForGeneratedCodeCharacterBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ACharacterBase, 2578543983);
+	IMPLEMENT_CLASS(ACharacterBase, 3068744877);
 	template<> GAME_API UClass* StaticClass<ACharacterBase>()
 	{
 		return ACharacterBase::StaticClass();

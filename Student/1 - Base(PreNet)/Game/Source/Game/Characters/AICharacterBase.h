@@ -85,9 +85,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-    //TODO: Override ServerApplyDamage()
-    //virtual void ServerApplyDamage_Implementation() override;
-    //virtual bool ServerApplyDamage_Validate() override;
+	//TODO: Override ServerApplyDamage()
+	//virtual void ServerApplyDamage_Implementation() override;
+	//virtual bool ServerApplyDamage_Validate() override;
 private:
 	AActor* TargetActor;
 

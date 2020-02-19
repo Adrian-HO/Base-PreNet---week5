@@ -71,12 +71,12 @@ protected:
 
 	UPawnNoiseEmitterComponent* NoiseEmitterComponent;
 
-private:
 	UFUNCTION(Server, Reliable, WithValidation)
 		void ServerHoldWeapon(class AWeaponBase* Weapon);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 		void ServerDropWeapon();
+private:
 
 public: //Class Components
 	class UHealthComponent* Health;
