@@ -93,8 +93,8 @@ public: //Class Components
 		bool bIsFiring;
 
 	UPROPERTY(Replicated)
-		FVector CurrentFacing;
+		bool bHasWeapon;
 
 	UPROPERTY(Replicated)
-		bool bHasWeapon;
+		FVector CurrentFacing;
 };

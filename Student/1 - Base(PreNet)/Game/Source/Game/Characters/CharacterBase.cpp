@@ -11,9 +11,6 @@
 #include "Math/UnrealMathUtility.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 
-void ACharacterBase::ServerChangeFacing(FVector TargetVector)
-{
-}
 
 /*
 Setup the character defaults
@@ -216,7 +213,7 @@ This function is called by InteractPressed() in the APlayerControllerDefault cla
 void ACharacterBase::Interact(AActor* Actor)
 {
 	/* Drop the current weapon.*/
-	ServerDropWeapon_Implementation();
+	ServerDropWeapon();
 	/* Check if the actor is an item.*/
 	AItemBase* Item = Cast<AItemBase>(Actor);
 	if (Item == nullptr)
@@ -230,7 +227,7 @@ void ACharacterBase::Interact(AActor* Actor)
 	AWeaponBase* Weapon = Cast<AWeaponBase>(Item);
 
 	if (Weapon)
-		ServerHoldWeapon_Implementation(Weapon);
+		ServerHoldWeapon(Weapon);
 }
 
 /*
@@ -238,14 +235,17 @@ HoldWeapon() will attach the weapon that is picked up by the Character
 */
 void ACharacterBase::ServerHoldWeapon_Implementation(AWeaponBase* Weapon)
 {
-	check(Weapon != nullptr && "Passed a null weapon!");
-	// Drop currently carried weapon first.
-	ServerDropWeapon_Implementation();
-	// Attach weapon to the character.
-	CurrentWeapon = Weapon;
-	CurrentWeapon->Attach(this);
-	CurrentWeapon->OnWeaponFired.Clear();
-	CurrentWeapon->OnWeaponFired.AddDynamic(this, &ACharacterBase::OnWeaponFired);
+	ServerDropWeapon();
+
+	if (CurrentWeapon == nullptr)
+	{
+
+		if (GetLocalRole() == ROLE_Authority)
+		{
+			CurrentWeapon = Weapon;
+			AttachCurrentWeapon();
+		}
+	}
 }
 /*
 DropWeapon() will detach the Weapon Currently held by the character
@@ -294,15 +294,19 @@ void ACharacterBase::OnDeath()
 	PrimaryActorTick.bCanEverTick = false;
 
 	/* Drop held weapon.*/
-	ServerDropWeapon_Implementation();
-
-	/* Disable character's capsule collision.*/
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ServerDropWeapon();
+	NetMulticastOnDeath();
 
 	//this code Allow character's ragdoll to be pushed around. 
 	SkeletalMesh->SetCollisionProfileName(TEXT("BlockAll"));
 	SkeletalMesh->CanCharacterStepUpOn = ECB_No;
 	SkeletalMesh->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
+}
+
+void ACharacterBase::NetMulticastOnDeath_Implementation()
+{
+	/* Disable character's capsule collision.*/
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	/* Simulate character's ragdoll.*/
 	SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -322,6 +326,13 @@ class USkeletalMeshComponent* ACharacterBase::GetSkeletalMesh()
 
 void ACharacterBase::AttachCurrentWeapon()
 {
+	if (CurrentWeapon != nullptr)
+	{
+		CurrentWeapon->Attach(this);
+		CurrentWeapon->OnWeaponFired.Clear();
+		CurrentWeapon->OnWeaponFired.AddDynamic(this, &ACharacterBase::OnWeaponFired);
+		//SUBSCRIBE to the CUrrentWeapon's OnWeaponFired Event/Delegate
+	}
 }
 
 void ACharacterBase::ChangeFacing(FVector TargetVector)
@@ -330,4 +341,26 @@ void ACharacterBase::ChangeFacing(FVector TargetVector)
 	CurrentFacing = TargetVector;
 	if (GetLocalRole() < ROLE_Authority)
 		ServerChangeFacing(CurrentFacing);
+}
+
+void ACharacterBase::ServerChangeFacing_Implementation(FVector TargetVector)
+{
+	ChangeFacing(TargetVector);
+}
+
+void ACharacterBase::ServerApplyDamage_Implementation()
+{
+	FDamageEvent DamageEvent;
+	TakeDamage(10.0f, DamageEvent, nullptr, this);
+}
+
+void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACharacterBase, CurrentWeapon);
+	DOREPLIFETIME(ACharacterBase, CurrentFacing);
+	DOREPLIFETIME(ACharacterBase, bIsAiming);
+	DOREPLIFETIME(ACharacterBase, bIsFiring);
+	DOREPLIFETIME(ACharacterBase, bHasWeapon);
 }

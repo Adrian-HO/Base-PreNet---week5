@@ -1,8 +1,8 @@
 {
 	"SourceFiles": [
-		"C:\\Users\\ho000086\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\Game\\Game.Build.cs",
-		"C:\\Users\\ho000086\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\Game.Target.cs",
-		"C:\\Users\\ho000086\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\GameEditor.Target.cs"
+		"C:\\Users\\Adrian\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\Game\\Game.Build.cs",
+		"C:\\Users\\Adrian\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\Game.Target.cs",
+		"C:\\Users\\Adrian\\Desktop\\Base-PreNet---week5\\Student\\1 - Base(PreNet)\\Game\\Source\\GameEditor.Target.cs"
 	],
-	"EngineVersion": "4.24.0"
+	"EngineVersion": "4.24.1"
 }

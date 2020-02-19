@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\Game.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{1701906D-D896-428F-99D4-D4A3BDBAD3A9}</UniqueIdentifier>
+      <UniqueIdentifier>{E1222EF3-1497-43D4-BC06-67044C584914}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\Game.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{2D0AF8C2-582F-4BE2-9D68-8425BE8369E1}</UniqueIdentifier>
+      <UniqueIdentifier>{AAA4AEEB-2F3D-43E6-B9D1-28997AE0EB63}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -27,7 +27,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\Game">
-      <UniqueIdentifier>{B2CE0F00-E260-4FB3-A22C-8B9254AADEAB}</UniqueIdentifier>
+      <UniqueIdentifier>{4FC7973B-7CF0-41E6-930E-309E39846E48}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\Game\Game.Build.cs">
       <Filter>Source\Game</Filter>
@@ -39,7 +39,7 @@
       <Filter>Source\Game</Filter>
     </ClInclude>
     <Filter Include="Source\Game\Characters">
-      <UniqueIdentifier>{AF02BB78-B3C8-4ABC-A040-21E65C6BF6CC}</UniqueIdentifier>
+      <UniqueIdentifier>{C553F0CC-D122-450A-A00B-328D3567F4E2}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Game\Characters\CharacterBase.cpp">
       <Filter>Source\Game\Characters</Filter>
@@ -54,7 +54,7 @@
       <Filter>Source\Game\Characters</Filter>
     </ClInclude>
     <Filter Include="Source\Game\Gameplay">
-      <UniqueIdentifier>{0C09F4F0-12B9-4D47-A139-76D1D5223661}</UniqueIdentifier>
+      <UniqueIdentifier>{2E77B5E8-1A04-400E-AF6F-6BA7A9E6F600}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Game\Gameplay\GameModeDefault.cpp">
       <Filter>Source\Game\Gameplay</Filter>
@@ -69,7 +69,7 @@
       <Filter>Source\Game\Gameplay</Filter>
     </ClInclude>
     <Filter Include="Source\Game\Gameplay\Health">
-      <UniqueIdentifier>{B143F4A1-CB1F-492F-ABA0-45A533B7C170}</UniqueIdentifier>
+      <UniqueIdentifier>{FB899057-F2B9-4048-975D-9E07670FBC44}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Game\Gameplay\Health\HealthComponent.cpp">
       <Filter>Source\Game\Gameplay\Health</Filter>
@@ -78,7 +78,7 @@
       <Filter>Source\Game\Gameplay\Health</Filter>
     </ClInclude>
     <Filter Include="Source\Game\Items">
-      <UniqueIdentifier>{B4DB0446-33F0-48E1-A632-82C93F38ECFD}</UniqueIdentifier>
+      <UniqueIdentifier>{8FAD7015-E85D-4D11-8EB1-97BB01394066}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Game\Items\ItemBase.cpp">
       <Filter>Source\Game\Items</Filter>
@@ -87,7 +87,7 @@
       <Filter>Source\Game\Items</Filter>
     </ClInclude>
     <Filter Include="Source\Game\Weapons">
-      <UniqueIdentifier>{6F2684C9-61AF-4A93-9AB2-44D6777D1CE9}</UniqueIdentifier>
+      <UniqueIdentifier>{79219071-71EE-439D-85EC-CEAF89C4F581}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\Game\Weapons\ProjectileBase.cpp">
       <Filter>Source\Game\Weapons</Filter>

@@ -78,7 +78,8 @@ private: \
 	friend struct Z_Construct_UClass_UHealthComponent_Statics; \
 public: \
 	DECLARE_CLASS(UHealthComponent, UActorComponent, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/Game"), NO_API) \
-	DECLARE_SERIALIZER(UHealthComponent)
+	DECLARE_SERIALIZER(UHealthComponent) \
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 
 #define Game_Source_Game_Gameplay_Health_HealthComponent_h_15_INCLASS \
@@ -87,7 +88,8 @@ private: \
 	friend struct Z_Construct_UClass_UHealthComponent_Statics; \
 public: \
 	DECLARE_CLASS(UHealthComponent, UActorComponent, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/Game"), NO_API) \
-	DECLARE_SERIALIZER(UHealthComponent)
+	DECLARE_SERIALIZER(UHealthComponent) \
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 
 #define Game_Source_Game_Gameplay_Health_HealthComponent_h_15_STANDARD_CONSTRUCTORS \

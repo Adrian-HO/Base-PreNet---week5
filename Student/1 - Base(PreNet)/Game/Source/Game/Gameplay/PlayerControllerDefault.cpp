@@ -77,7 +77,7 @@ void APlayerControllerDefault::AimPressed()
 	if(!Character)
 		return;
 	
-	Character->Aim(true);
+	Character->ServerAim(true);
 }
 
 void APlayerControllerDefault::AimReleased()
@@ -85,7 +85,7 @@ void APlayerControllerDefault::AimReleased()
 	if(!Character)
 		return;
 
-	Character->Aim(false);
+	Character->ServerAim(false);
 }
 
 void APlayerControllerDefault::InteractPressed()

@@ -2,6 +2,7 @@
 
 #include "ProjectileBase.h"
 #include "Game.h"
+#include "Characters/CharacterBase.h"
 
 AProjectileBase::AProjectileBase()
 {
@@ -16,9 +17,9 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-//TODO:
-	// Subscribe to actor's hit event. 
-    //SUBSCRIBE to the AActors hit event. Look at this, another way to detect collisions.
+	//TODO:
+		// Subscribe to actor's hit event. 
+		//SUBSCRIBE to the AActors hit event. Look at this, another way to detect collisions.
 	AActor::OnActorHit.AddDynamic(this, &AProjectileBase::OnActorHit);
 }
 
@@ -27,6 +28,9 @@ void AProjectileBase::BeginPlay()
 	Super::BeginPlay();
 
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectileBase::DestroySelf, LifeTime, false);
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
 }
 
 void AProjectileBase::Tick(float DeltaTime)
@@ -41,17 +45,34 @@ void AProjectileBase::Tick(float DeltaTime)
 
 void AProjectileBase::OnActorHit(AActor* Self, AActor* Other, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// Cause damage to the hit actor.
-	if(Other != nullptr)
+	if (Other != nullptr)
 	{
-		FDamageEvent DamageEvent;
-		Other->TakeDamage(Damage, DamageEvent, nullptr, this);
+		if (Role == ROLE_Authority)
+		{
+
+			MakeNoise(1.0f, Instigator);
+			//CAST Other to a ACharacterBase* variable called CharacterB
+			ACharacterBase* CharacterB = Cast<ACharacterBase>(Other);
+			if (CharacterB)
+			{
+				//DECLARE a AActor* called Weapon and assign it to the return value of GetOwner()
+				AActor* Weapon = GetOwner();
+				//DECLARE a AActor* called Character and assign it to the return value of the Weapon's GetOwner()
+				AActor* Character = Weapon->GetOwner();
+				//Draw a debug Message to display the Character Name
+
+				//CALL ServerApplyDamage() on CharacterBase
+				CharacterB->ServerApplyDamage();
+			}
+
+			Destroy();
+
+		}
 	}
-	Destroy();
 }
 
 void AProjectileBase::DestroySelf()
 {
-	// Destroy self.
-	Destroy();
+	if (GetLocalRole() == ROLE_Authority)
+		Destroy();
 }

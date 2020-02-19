@@ -2,6 +2,7 @@
 
 #include "HealthComponent.h"
 #include "Game.h"
+#include "Net/UnrealNetwork.h"
 
 UHealthComponent::UHealthComponent()
 {
@@ -78,4 +79,11 @@ void UHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const
 bool UHealthComponent::IsDead() const
 {
 	return CurrentHealth <= 0.0f;
+}
+
+void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UHealthComponent, CurrentHealth);
 }

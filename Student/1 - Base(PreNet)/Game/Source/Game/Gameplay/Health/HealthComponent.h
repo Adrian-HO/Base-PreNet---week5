@@ -20,7 +20,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	float MaximumHealth;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	float CurrentHealth;
 
 	UPROPERTY(BlueprintAssignable)
