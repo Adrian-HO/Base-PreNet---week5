@@ -12,8 +12,6 @@ UHealthComponent::UHealthComponent()
 	// Set default values.
 	MaximumHealth = 100.0f;
 	CurrentHealth = -1.0f;
-
-	SetIsReplicated(true);
 }
 
 void UHealthComponent::InitializeComponent()

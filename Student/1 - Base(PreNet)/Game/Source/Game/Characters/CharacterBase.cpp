@@ -205,6 +205,10 @@ void ACharacterBase::ServerAim_Implementation(bool Toggle)
 	bIsAiming = Toggle;
 }
 
+bool ACharacterBase::ServerAim_Validate(bool Toggle)
+{
+	return true;
+}
 
 /*
 Interact() Handles interacting with Items. In our case Weapons. We first Drop a weapon (If we have one) then Hold the one that is picked up.
@@ -247,6 +251,11 @@ void ACharacterBase::ServerHoldWeapon_Implementation(AWeaponBase* Weapon)
 		}
 	}
 }
+
+bool ACharacterBase::ServerHoldWeapon_Validate(AWeaponBase* Weapon)
+{
+	return true;
+}
 /*
 DropWeapon() will detach the Weapon Currently held by the character
 */
@@ -264,6 +273,11 @@ void ACharacterBase::ServerDropWeapon_Implementation()
 		bIsAiming = false;
 		//ENDIF
 	}
+}
+
+bool ACharacterBase::ServerDropWeapon_Validate()
+{
+	return true;
 }
 /*
 OnWeaponFired() is a callback function that is triggered by the Weapon. Here we simply play the animation if we are aiming or not
@@ -314,6 +328,11 @@ void ACharacterBase::NetMulticastOnDeath_Implementation()
 	SkeletalMesh->SetSimulatePhysics(true);
 }
 
+bool ACharacterBase::NetMulticastOnDeath_Validate()
+{
+	return true;
+}
+
 AWeaponBase* ACharacterBase::GetCurrentWeapon()
 {
 	return CurrentWeapon;
@@ -348,10 +367,20 @@ void ACharacterBase::ServerChangeFacing_Implementation(FVector TargetVector)
 	ChangeFacing(TargetVector);
 }
 
+bool ACharacterBase::ServerChangeFacing_Validate(FVector TargetVector)
+{
+	return true;
+}
+
 void ACharacterBase::ServerApplyDamage_Implementation()
 {
 	FDamageEvent DamageEvent;
 	TakeDamage(10.0f, DamageEvent, nullptr, this);
+}
+
+bool ACharacterBase::ServerApplyDamage_Validate()
+{
+	return true;
 }
 
 void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
