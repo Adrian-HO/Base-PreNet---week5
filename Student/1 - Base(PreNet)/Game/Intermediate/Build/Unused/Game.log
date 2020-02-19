@@ -1,5 +1,5 @@
 ﻿  Parsing headers for GameEditor
     Running UnrealHeaderTool "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Game.uproject" "C:\Users\ho000086\Desktop\Base-PreNet---week5\Student\1 - Base(PreNet)\Game\Intermediate\Build\Win64\GameEditor\Development\GameEditor.uhtmanifest" -LogCmds="loginit warning, logexit warning, logdatabase error" -Unattended -WarningsAsErrors -installed
-  Reflection code generated for GameEditor in 4.8611135 seconds
+  Reflection code generated for GameEditor in 7.0264015 seconds
   Target is up to date
-  Total execution time: 5.40 seconds
+  Total execution time: 7.92 seconds
